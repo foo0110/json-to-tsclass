@@ -1,0 +1,27 @@
+{
+  "field1": 1,
+  "field2": "2a",
+  "field3": [1, 2],
+  "field4": [1, "a"],
+  "field5": {
+    "field5-subField1": "id1",
+    "field5-subField2": {
+      "field5-subfield2-A": 1,
+      "field5-subfield2-B": ["j4"]
+    }
+  },
+  "field6": [[2, "b"]],
+  "field7": [[{ "field7-subfield1": "f2" }]],
+  "field8": [
+    {
+      "field8-subfield1": "f3",
+      "field8-subfield2": {
+        "field8-subfield1a": 12,
+        "field8-subfieldb": [1, 2, "we"]
+      }
+    },
+    {
+      "id": 2
+    }
+  ]
+}

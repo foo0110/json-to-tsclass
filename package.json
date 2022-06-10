@@ -1,0 +1,27 @@
+{
+  "name": "json-to-tsclass",
+  "version": "1.0.0",
+  "description": "Convert list of JSON data into simple TypeScript Class",
+  "scripts": {
+    "test": "jest --coverage",
+    "build": "rm -rf dist & tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/foo0110/json-to-tsclass.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/foo0110/json-to-tsclass/issues"
+  },
+  "homepage": "https://github.com/foo0110/json-to-tsclass#readme",
+  "devDependencies": {
+    "@types/jest": "^28.1.1",
+    "jest": "^28.1.1",
+    "ts-jest": "^28.0.4",
+    "ts-node": "^10.8.1",
+    "typescript": "^4.7.3"
+  }
+}
