@@ -32,7 +32,6 @@ const getType = (value: unknown) => {
   if (typeof value === "number") {
     return ValueTypes.number;
   }
-  // if (Object.prototype.hasOwnProperty.call(value, "length")) {
   if (value && Object.prototype.hasOwnProperty.call(value, "length")) {
     return ValueTypes.Array;
   }
@@ -85,37 +84,6 @@ const constructSubType = (type: ValueTypes, object: Anonymous): string => {
   }
   return typeConstructor.Object(object);
 };
-
-// const constructSubType: {
-//   [ValueTypes.Object]: (object: Anonymous) => string
-//   [ValueTypes.Array]: (object: Anonymous[]) => string
-// } = {
-//   [ValueTypes.Object]: (object: Anonymous): string =>
-//     `{\n${constructClass(object).join(`\n`)}\n}`,
-//   [ValueTypes.Array]: (objects: Anonymous[]): string => {
-//     const subTypes = objects
-//       ? filterUnique(objects.map((obj) => getType(obj)))
-//       : [];
-
-//     if (
-//       subTypes.length &&
-//       !subTypes.some(
-//         (obj) => obj === ValueTypes.Object || obj === ValueTypes.Array
-//       )
-//     ) {
-//       return `Array<${subTypes.join('|')}>`;
-//     }
-//     return `Array<${objects
-//       .map((obj) => {
-//         const type = getType(obj);
-//         const func = type === ValueTypes.Array ? ValueTypes.Array : type === ValueTypes.Object ? ValueTypes.Object : type
-//         return Object.prototype.hasOwnProperty.call(constructSubType, type)
-//           ? constructSubType[func](obj)
-//           : type;
-//       })
-//       .join('|')}>`;
-//   },
-// };
 
 const constructClass = (object: Anonymous): Array<string> => {
   const properties = [];
@@ -173,10 +141,6 @@ export const build = (className: string, jsonDatas: Array<JSON>) => {
       (prev, val) => ({ ...prev, ...buildContent(val, prev) }),
       {}
     ) as Anonymous;
-  // let data = {} as JSON;
-  // for (const jsonData of jsonDatas.map((val) => val as Object)) {
-  //   data = buildContent(jsonData, data);
-  // }
   const classContent = constructClass(data).join(`\n`);
   return `class ${className} {\n${classContent}\n}`;
 };
