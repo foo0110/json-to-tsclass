@@ -1,13 +1,13 @@
 {
   "name": "json-to-tsclass",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "lockfileVersion": 2,
   "requires": true,
   "packages": {
     "": {
       "name": "json-to-tsclass",
-      "version": "1.0.0",
-      "license": "ISC",
+      "version": "0.0.1",
+      "license": "MIT",
       "devDependencies": {
         "@types/jest": "^28.1.1",
         "jest": "^28.1.1",
