@@ -1,6 +1,6 @@
 {
   "name": "json-to-tsclass",
-  "version": "0.1.2-alpha",
+  "version": "0.1.3-alpha",
   "description": "Convert list of JSON data into simple TypeScript Class",
   "files": [
     "dist"

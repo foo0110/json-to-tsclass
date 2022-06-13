@@ -70,9 +70,10 @@ const constructSubType = (type: ValueTypes, object: Anonymous): string => {
       ) {
         return `Array<${subTypes.join("|")}>`;
       }
-      return `Array<${objects
+      const arrayTyoe = objects
         .map((obj) => constructSubType(getType(obj), obj))
-        .join("|")}>`;
+        .join("|");
+      return `Array<${arrayTyoe || `unknown`}>`;
     },
   };
   if (validTypes.every((funcType) => funcType !== type)) {
