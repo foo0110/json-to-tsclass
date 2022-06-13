@@ -42,5 +42,6 @@ field9: {
 'field9-subField3': Date
 }
 field10: unknown
+'11field': string
 }"
 `;

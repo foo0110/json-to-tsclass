@@ -42,7 +42,7 @@ const getType = (value: unknown) => {
 };
 
 const quotationMark = (value: string) =>
-  `${/[-, ,.]/gm.test(value) ? "'" : ""}`;
+  `${/^[0-9]|[-, ,.]/gm.test(value) ? "'" : ""}`;
 
 const filterUnique = (origins: Array<ValueTypes>) => {
   const items = new Array<ValueTypes>();
