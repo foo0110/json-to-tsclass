@@ -118,7 +118,7 @@ const buildContent = (object: Object, data: Object) => {
 
         result[key] = {
           ...(result[key] as Object),
-          ...buildContent(current as unknown as JSON, {} as unknown as JSON),
+          ...buildContent(current as unknown as Record<string, unknown>, {} as unknown as Record<string, unknown>),
         };
         continue;
       }
@@ -133,7 +133,7 @@ const buildContent = (object: Object, data: Object) => {
  * @param jsonDatas The list of JSON data to be analyzed and build the Class
  * @returns The unformatted class  built
  */
-export const build = (className: string, jsonDatas: Array<JSON>) => {
+export const build = (className: string, jsonDatas: Array<Record<string, unknown>>) => {
   const data = jsonDatas
     .map((val) => val as Object)
     .reduce(
