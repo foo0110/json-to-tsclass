@@ -78,15 +78,17 @@ const constructSubType = (type: ValueTypes, object: Anonymous): string => {
   return typeConstructor.Object(object);
 };
 
-const constructClass = (object: Anonymous): Array<string> => {
-  const properties = [];
+const constructClass = (object: Anonymous, isTopLevel = false): Array<string> => {
+  const properties: string[] = [];
+  const strict = isTopLevel && _buildOptions.strictPropertyInitialization;
   for (const key in object) {
     if (Object.prototype.hasOwnProperty.call(object, key)) {
       const element = object[key] as Anonymous;
       const type = getType(element);
+      const strictMark = strict ? "!" : "";
 
       properties.push(
-        `${quotationMark(key)}${key}${quotationMark(key)}: ${constructSubType(
+        `${quotationMark(key)}${key}${quotationMark(key)}${strictMark}: ${constructSubType(
           type,
           element
         )}`
@@ -133,13 +135,36 @@ const buildContent = (object: Object, data: Object) => {
  * @param jsonDatas The list of JSON data to be analyzed and build the Class
  * @returns The unformatted class  built
  */
-export const build = (className: string, jsonDatas: Array<Record<string, unknown>>) => {
+const formatWithPrettier = (code: string): string => {
+  try {
+    // dynamically require prettier so code still works if prettier isn't installed
+    // (fall back to raw output)
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const prettier = require("prettier");
+    return prettier.format(code, { parser: "typescript" });
+  } catch (e) {
+    return code;
+  }
+};
+
+// build options shared during a single build invocation
+let _buildOptions: { strictPropertyInitialization?: boolean } = {};
+
+export const build = (
+  className: string,
+  jsonDatas: Array<Record<string, unknown>>,
+  options?: { strictPropertyInitialization?: boolean }
+) => {
+  _buildOptions = options || {};
   const data = jsonDatas
     .map((val) => val as Object)
     .reduce(
       (prev, val) => ({ ...prev, ...buildContent(val, prev) }),
       {}
     ) as Anonymous;
-  const classContent = constructClass(data).join(`\n`);
-  return `class ${className} {\n${classContent}\n}`;
+  const classContent = constructClass(data, true).join(`\n`);
+  const raw = `class ${className} {\n${classContent}\n}`;
+  // reset options
+  _buildOptions = {};
+  return formatWithPrettier(raw);
 };
