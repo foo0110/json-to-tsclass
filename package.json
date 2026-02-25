@@ -1,7 +1,6 @@
 {
   "name": "json-to-tsclass",
   "version": "0.1.3-alpha",
-  "packageManager": "pnpm@8.6.0",
   "description": "Convert list of JSON data into simple TypeScript Class",
   "files": [
     "dist"
@@ -28,6 +27,9 @@
     "name": "Sean Foo",
     "email": "foo0110@icloud.com"
   },
+  "engines": {
+    "node": ">=24"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/foo0110/json-to-tsclass/issues"
@@ -41,5 +43,6 @@
     "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
-  }
+  },
+  "packageManager": "pnpm@10.30.2+sha512.36cdc707e7b7940a988c9c1ecf88d084f8514b5c3f085f53a2e244c2921d3b2545bc20dd4ebe1fc245feec463bb298aecea7a63ed1f7680b877dc6379d8d0cb4"
 }
