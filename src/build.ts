@@ -13,17 +13,13 @@ enum ValueTypes {
 }
 
 const getType = (value: unknown) => {
-  if (
-    value instanceof Object &&
-    !Object.prototype.hasOwnProperty.call(value, "length")
-  ) {
+  if (Array.isArray(value)) {
+    return ValueTypes.Array;
+  }
+  if (value instanceof Object && !Array.isArray(value)) {
     return ValueTypes.Object;
   }
-  if (
-    typeof value === "string" &&
-    value.length >= 8 &&
-    !isNaN(Date.parse(value))
-  ) {
+  if (typeof value === "string" && value.length >= 8 && !isNaN(Date.parse(value))) {
     return ValueTypes.Date;
   }
   if (typeof value === "string") {
@@ -32,9 +28,6 @@ const getType = (value: unknown) => {
   if (typeof value === "number") {
     return ValueTypes.number;
   }
-  if (value && Object.prototype.hasOwnProperty.call(value, "length")) {
-    return ValueTypes.Array;
-  }
   if (value === true || value === false) {
     return ValueTypes.boolean;
   }
@@ -42,7 +35,7 @@ const getType = (value: unknown) => {
 };
 
 const quotationMark = (value: string) =>
-  `${/^[0-9]|[-, ,.]/gm.test(value) ? "'" : ""}`;
+  (/^[A-Za-z_$][A-Za-z0-9_$]*$/.test(value) ? "" : '"');
 
 const filterUnique = (origins: Array<ValueTypes>) => {
   const items = new Array<ValueTypes>();
@@ -64,16 +57,15 @@ const constructSubType = (type: ValueTypes, object: Anonymous): string => {
 
       if (
         subTypes.length &&
-        !subTypes.some(
-          (obj) => obj === ValueTypes.Object || obj === ValueTypes.Array
-        )
+        !subTypes.some((obj) => obj === ValueTypes.Object || obj === ValueTypes.Array)
       ) {
         return `Array<${subTypes.join("|")}>`;
       }
-      const arrayTyoe = objects
-        .map((obj) => constructSubType(getType(obj), obj))
-        .join("|");
-      return `Array<${arrayTyoe || `unknown`}>`;
+      // construct detailed subtype strings and dedupe them to avoid repeated unions
+      const constructed = objects.map((obj) => constructSubType(getType(obj), obj));
+      const uniqueConstructed = Array.from(new Set(constructed));
+      const arrayType = uniqueConstructed.join("|");
+      return `Array<${arrayType || `unknown`}>`;
     },
   };
   if (validTypes.every((funcType) => funcType !== type)) {
@@ -111,11 +103,17 @@ const buildContent = (object: Object, data: Object) => {
   for (const key in source) {
     if (Object.prototype.hasOwnProperty.call(object, key)) {
       const value = source[key];
-      if (!result[key]) {
+      // only treat a missing key when it's not present on result (avoid falsy-value overwrite)
+      if (!Object.prototype.hasOwnProperty.call(result, key)) {
         result[key] = value;
         continue;
       }
-      if (result[key] && getType(value) === ValueTypes.Object) {
+      // merge nested objects only when both sides are objects
+      if (
+        Object.prototype.hasOwnProperty.call(result, key) &&
+        getType(value) === ValueTypes.Object &&
+        getType(result[key]) === ValueTypes.Object
+      ) {
         const current = { [key]: value };
 
         result[key] = {
