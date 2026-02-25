@@ -81,20 +81,36 @@ const constructSubType = (type: ValueTypes, object: Anonymous): string => {
 const constructClass = (object: Anonymous, isTopLevel = false): Array<string> => {
   const properties: string[] = [];
   const strict = isTopLevel && _buildOptions.strictPropertyInitialization;
+  const propNames: string[] = [];
   for (const key in object) {
     if (Object.prototype.hasOwnProperty.call(object, key)) {
       const element = object[key] as Anonymous;
       const type = getType(element);
-      const strictMark = strict ? "!" : "";
+      propNames.push(key);
 
       properties.push(
-        `${quotationMark(key)}${key}${quotationMark(key)}${strictMark}: ${constructSubType(
+        `${quotationMark(key)}${key}${quotationMark(key)}: ${constructSubType(
           type,
           element
-        )}`
+        )};`
       );
     }
   }
+
+  if (strict && propNames.length) {
+    // generate a constructor that assigns each property to a dummy value (cast to any)
+    // this satisfies TypeScript's strictPropertyInitialization without using '!'
+    const constructorLines: string[] = [];
+    constructorLines.push(`constructor() {`);
+    for (const key of propNames) {
+      const keyAccess = (/^[A-Za-z_$][A-Za-z0-9_$]*$/.test(key) ? `this.${key}` : `this[${JSON.stringify(key)}]`);
+      constructorLines.push(`  ${keyAccess} = undefined as any;`);
+    }
+    constructorLines.push(`}`);
+    properties.push(``);
+    properties.push(...constructorLines);
+  }
+
   return properties;
 };
 
