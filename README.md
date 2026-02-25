@@ -2,6 +2,8 @@
 
 Convert list of JSON data into simple TypeScript Class
 
+Stable release: 1.0.0
+
 ## Sample
 
 ---
