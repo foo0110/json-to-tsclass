@@ -75,15 +75,3 @@ class Sample {
   field10: unknown;
 }
 ```
-
-## Release (semantic-release)
-
-This repository includes a GitHub Actions workflow (.github/workflows/semantic-release.yml) that runs semantic-release to automate versioning and publishing.
-
-Required repository secrets:
-
-- NPM_TOKEN — token for npm publishing (add in Settings → Secrets).
-- GITHUB_TOKEN — provided automatically to Actions; ensure it is not removed.
-
-Commit messages must follow Conventional Commits so semantic-release can determine release types (fix/feat/build chore, etc.).
-
