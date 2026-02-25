@@ -4,16 +4,16 @@ This file is intended to give future Copilot/AI sessions concise, repository-spe
 
 ## Build, test, and lint commands
 - Build (compile + emit declarations):
-  - npm run build
+  - pnpm run build
   - (This runs: rm -rf dist & tsc)
-  - Alternative: npx tsc -p tsconfig.json
+  - Alternative: pnpm exec tsc -p tsconfig.json
 - Test (full suite):
-  - npm test
-  - Equivalent: npx jest --coverage
+  - pnpm test
+  - Equivalent: pnpm exec jest --coverage
 - Run a single test file or pattern:
-  - npx jest __tests__/build.spec.ts
-  - or npx jest -t "<test name regex>" to run a specific test case
-  - You can also pass a path through npm scripts: npm test -- __tests__/build.spec.ts
+  - pnpm exec jest __tests__/build.spec.ts
+  - or pnpm exec jest -t "<test name regex>" to run a specific test case
+  - You can also pass a path through the test script: pnpm test -- __tests__/build.spec.ts
 - Lint: no lint script or linter configured in this repo (none to run by default).
 
 ## High-level architecture
